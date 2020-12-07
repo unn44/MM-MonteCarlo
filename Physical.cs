@@ -142,20 +142,20 @@ namespace MM_MonteCarlo
         /// </summary>
         private void DoMCS()
         {
-            //TODO
-            foreach (var par in _particles)
+            var curParticleCount = _particles.Count;
+            
+            for (var i=0; i<curParticleCount; i++)
             {
                 if (!(_rnd.NextDouble() >= 0.75)) continue; //вероятность 1/4 сделать шаг
 
-                if (par.X == 0)
+                if (_particles[i].X == 0)
                 {
-                    DoFirstStep(par); //должно работать хорошо, т.к. новым атомам некуда будет идти на текущем МКШ.
+                    DoFirstStep(_particles[i]);
                     continue;
                 }
 
-                DoOtherStep(par);
-
-                if (par.X == _maxX - 1) _rightBorder = true; //атом достиг правой границы (т.е. это последний МКШ)
+                DoOtherStep(_particles[i]);
+                if (_particles[i].X == _maxX - 1) _rightBorder = true; //атом достиг правой границы (т.е. это последний МКШ)
             }
         }
         
