@@ -35,6 +35,11 @@ namespace MM_MonteCarlo
         /// Внутренний рандом для класса Physical.
         /// </summary>
         private readonly Random _rnd;
+
+        /// <summary>
+        /// Флаг: атом достиг правой границы решетки.
+        /// </summary>
+        private bool _rightBorder;
         
         /// <summary>
         /// Конструктор: инициализация коллекции атомов и рандома. 
@@ -47,11 +52,60 @@ namespace MM_MonteCarlo
         #endregion
 
         #region Вспомогательные функции
-        // TODO
+        /// <summary>
+        /// Обеспечивает периодические граничные условия по оси Y.
+        /// </summary>
+        /// <param name="y">Новая планируемая координата Y.</param>
+        /// <returns></returns>
+        private int SmartY(int y)
+        {
+            if (y == -1) return _maxY - 1;
+            if (y == _maxY) return 0;
+            return y;
+        }
+        /// <summary>
+        /// Выбор узла для следующего шага.
+        /// </summary>
+        /// <returns>[0] - сдвиг вправо, [-1] - сдвиг вправо и вверх, [1] - сдвиг вправо и вниз.</returns>
+        private int RandomAngle()
+        {
+            var rr = _rnd.NextDouble();
+            if (0 <= rr && rr < 0.33) return -1;
+            if (rr <= 0.33 && rr < 0.66) return 0;
+            return 1;
+        }
         #endregion
 
         #region Функции, необходимые для расчёта одного МКШ
-        // TODO
+        /// <summary>
+        /// Сделать первый шаг.
+        /// </summary>
+        /// <param name="par">Атом, для которого требуется сделать шаг.</param>
+        private void DoFirstStep(Particle par)
+        {
+            if (_gridStatus[par.X + 1, par.Y]) return; //узел занят!
+            
+            _gridStatus[++par.X, par.Y] = true; // делаем шаг вправо текущим атомом
+            _particles.Add(new Particle(0,par.Y)); // просто генерируем ещё один атом на прошлое место (неограниченный источник)
+        }
+
+        /// <summary>
+        /// Сделать любой другой шаг (кроме первого).
+        /// </summary>
+        /// <param name="par">Атом, для которого требуется сделать шаг.</param>
+        private void DoOtherStep(Particle par)
+        {
+            var curY = SmartY(par.Y + RandomAngle());
+
+            if (_gridStatus[par.X + 1, curY]) return; //узел занят!
+            
+            _gridStatus[par.X, par.Y] = false;
+                
+            par.X++;
+            par.Y = curY;
+                
+            _gridStatus[par.X, par.Y] = true;
+        }
         #endregion
 
         /// <summary>
@@ -75,6 +129,7 @@ namespace MM_MonteCarlo
         {
             _gridStatus = new bool[_maxX,_maxY];
             _particles.Clear();
+            _rightBorder = false;
 
             for (var y = 0; y < _maxY; y += 1 + _initPeriod)
             {
@@ -90,14 +145,17 @@ namespace MM_MonteCarlo
             //TODO
             foreach (var par in _particles)
             {
-                if (!(_rnd.NextDouble() >= 0.75)) continue;
-                if (par.X + 1 > _maxX)
+                if (!(_rnd.NextDouble() >= 0.75)) continue; //вероятность 1/4 сделать шаг
+
+                if (par.X == 0)
                 {
-                    _gridStatus[par.X, par.Y] = false;
-                    //_particles.Remove(); //!!!
+                    DoFirstStep(par); //должно работать хорошо, т.к. новым атомам некуда будет идти на текущем МКШ.
+                    continue;
                 }
-                _gridStatus[par.X++, par.Y] = false;
-                _gridStatus[par.X, par.Y] = true;
+
+                DoOtherStep(par);
+
+                if (par.X == _maxX - 1) _rightBorder = true; //атом достиг правой границы (т.е. это последний МКШ)
             }
         }
         
@@ -115,5 +173,7 @@ namespace MM_MonteCarlo
         /// </summary>
         /// <returns></returns>
         public bool[,] GetGridStatus() => _gridStatus;
+
+        public bool GetRightBorderStatus() => _rightBorder;
     }
 }

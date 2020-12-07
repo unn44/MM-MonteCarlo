@@ -101,7 +101,7 @@ public class ViewModel : INotifyPropertyChanged
 			//TODO: all actions
 			
 			CountSteps = $"Количество МКШ: {++_timerTick} ";
-			if (_timerTick != MaxTime) return; //TODO: right border check
+			if (_timerTick != MaxTime || !_physical.GetRightBorderStatus()) return;
 			
 			//turn off the timer
 			_timer.Enabled = false;
