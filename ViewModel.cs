@@ -36,6 +36,18 @@ public class ViewModel : INotifyPropertyChanged
 			}
 		}
 		
+		private ObservableCollection<Particle> _particles;
+		public ObservableCollection<Particle> Particles
+		{
+			get => _particles;
+
+			set
+			{
+				_particles = value;
+				OnPropertyChanged(nameof(Particles));
+			}
+		}
+		
 		#region RelayCommands
 		public ICommand Generate { get; set; }
 		public ICommand Start { get; set; }
@@ -47,15 +59,6 @@ public class ViewModel : INotifyPropertyChanged
 		public int InitPeriod { get; set; } = 0;
 		public int MaxTime { get; set; } = 100;
 		#endregion
-
-		private void Generation()
-		{
-			_timerTick = 0;
-			CountSteps = $"Количество МКШ: {_timerTick} ";
-			if (!StartOrStop) SetTimer();
-			
-			//TODO: Physical init
-		}
 		
 		public ViewModel()
 		{
@@ -68,6 +71,7 @@ public class ViewModel : INotifyPropertyChanged
 				var gridStatus = _physical.GetGridStatus();
 			}*/
 			
+			_physical = new Physical();
 			_timer = new Timer(100); // хз пока...
 			_timer.Elapsed += OnTimedEvent;
 			
@@ -75,6 +79,16 @@ public class ViewModel : INotifyPropertyChanged
 			
 			Generate = new RelayCommand(o => Generation());
 			Start = new RelayCommand(o => SetTimer());
+		}
+		
+		private void Generation()
+		{
+			_timerTick = 0;
+			CountSteps = $"Количество МКШ: {_timerTick} ";
+			if (!StartOrStop) SetTimer();
+			
+			_physical.InitAll(MaxY, MaxX, InitPeriod);
+			Particles = _physical.GetParticlesCollectionInit();
 		}
 
 		private void SetTimer()
@@ -98,10 +112,10 @@ public class ViewModel : INotifyPropertyChanged
 		
 		private void OnTimedEvent(object source, ElapsedEventArgs e)
 		{
-			//TODO: all actions
+			Particles = _physical.GetParticlesCollection();
 			
 			CountSteps = $"Количество МКШ: {++_timerTick} ";
-			if (_timerTick != MaxTime || !_physical.GetRightBorderStatus()) return;
+			if (_timerTick != MaxTime && !_physical.GetRightBorderStatus()) return;
 			
 			//turn off the timer
 			_timer.Enabled = false;

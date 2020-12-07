@@ -18,7 +18,7 @@ namespace MM_MonteCarlo
         }
 
         private int _x, _y;
-        //private double _margin;
+        private double _margin;
 
         /// <summary>
         /// X координата ячейки.
@@ -29,8 +29,8 @@ namespace MM_MonteCarlo
             set
             {
                 _x = value;
-                //Xcanvas = x - _margin;
-                //OnPropertyChanged(nameof(Xcanvas));
+                Xcanvas = _x - _margin;
+                OnPropertyChanged(nameof(Xcanvas));
                 OnPropertyChanged();
             }
         }
@@ -43,24 +43,24 @@ namespace MM_MonteCarlo
             set
             {
                 _y = value;
-                //Ycanvas = y - _margin;
-                //OnPropertyChanged(nameof(Ycanvas));
+                Ycanvas = _y - _margin;
+                OnPropertyChanged(nameof(Ycanvas));
                 OnPropertyChanged();
             }
         }
         /// <summary>
         /// Отцентрированная координата X центра частицы для построения на канвасе.
         /// </summary>
-        //public double Xcanvas { get; set; }
+        public double Xcanvas { get; set; }
         /// <summary>
         /// Отцентрированная координата Y центра частицы для построения на канвасе.
         /// </summary>
-        //public double Ycanvas { get; set; }
+        public double Ycanvas { get; set; }
 
         /// <summary>
         /// Диаметр (размер) частицы. Одинаковый для всех частиц.
         /// </summary>
-       // public static double Diameter { get; set; }
+        public double Diameter { get; set; } = 1;
         
 
         /// <summary>
@@ -70,11 +70,11 @@ namespace MM_MonteCarlo
         {
             X = x;
             Y = y;
-
-            //_margin = Diameter / 2.0;
+                
+            _margin = Diameter / 2.0;
             
-            //Xcanvas = X - _margin;
-            //Ycanvas = Y - _margin;
+            Xcanvas = X - _margin;
+            Ycanvas = Y - _margin;
         }
     }
 }

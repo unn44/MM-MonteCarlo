@@ -148,11 +148,11 @@ namespace MM_MonteCarlo
             {
                 if (!(_rnd.NextDouble() >= 0.75)) continue; //вероятность 1/4 сделать шаг
 
-                if (_particles[i].X == 0)
+                /*if (_particles[i].X == 0)
                 {
                     DoFirstStep(_particles[i]);
-                    continue;
-                }
+                    continue; //TODO: ЗДЕСЬ КАКАЯ-ТО ОШИБКА! :(
+                }*/
 
                 DoOtherStep(_particles[i]);
                 if (_particles[i].X == _maxX - 1) _rightBorder = true; //атом достиг правой границы (т.е. это последний МКШ)
@@ -167,6 +167,8 @@ namespace MM_MonteCarlo
             DoMCS();
             return  _particles;
         }
+        
+        public ObservableCollection<Particle> GetParticlesCollectionInit() => _particles;
 
         /// <summary>
         /// 

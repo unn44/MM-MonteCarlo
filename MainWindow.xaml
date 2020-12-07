@@ -18,17 +18,17 @@
 		</Grid.ColumnDefinitions>
 
 		<ItemsControl ItemsSource="{Binding Particles,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
-		              HorizontalAlignment="Left" VerticalAlignment="Center"
+		              HorizontalAlignment="Left" VerticalAlignment="Top"
 		              Margin="5"
-		              BorderBrush="DimGray" BorderThickness="{Binding CanvasBorderThickness}"
-		              Width="{Binding CanvasSize}"
-		              Height="{Binding CanvasSize}">
+		              
+		              Width="{Binding MaxX}"
+		              Height="{Binding MaxY}">
 			<ItemsControl.ItemsPanel>
 				<ItemsPanelTemplate>
-					<Canvas Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Width="{Binding SizeCell}" Height="{Binding SizeCell}"
+					<Canvas Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Width="{Binding MaxX}" Height="{Binding MaxY}"
 					        ClipToBounds="True">
 						<Canvas.RenderTransform>
-							<ScaleTransform ScaleX="{Binding CanvasZoom}" ScaleY="{Binding CanvasZoom}" CenterX="0" CenterY="0"></ScaleTransform>
+							<ScaleTransform ScaleX="5" ScaleY="5" CenterX="0" CenterY="0"></ScaleTransform>
 						</Canvas.RenderTransform>
 					</Canvas>
 				</ItemsPanelTemplate>
@@ -44,7 +44,7 @@
 
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
-					<Ellipse Fill="Crimson" Width="{Binding Diameter}" Height="{Binding Diameter}" />
+					<Ellipse Fill="MidnightBlue" Width="{Binding Diameter}" Height="{Binding Diameter}" />
 				</DataTemplate>
 			</ItemsControl.ItemTemplate>
 
