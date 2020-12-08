@@ -57,7 +57,7 @@ public class ViewModel : INotifyPropertyChanged
 		public int MaxY { get; set; } = 100;
 		public int MaxX { get; set; } = 250;
 		public int InitPeriod { get; set; } = 0;
-		public int MaxTime { get; set; } = 100;
+		public int MaxTime { get; set; } = 5000;
 		#endregion
 		
 		public ViewModel()
