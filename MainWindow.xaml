@@ -28,7 +28,7 @@
 					<Canvas Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Width="{Binding MaxX,Mode=TwoWay}" Height="{Binding MaxY,Mode=TwoWay}"
 					        ClipToBounds="True" IsItemsHost="False">
 						<Canvas.RenderTransform>
-							<ScaleTransform ScaleX="5" ScaleY="5" CenterX="0" CenterY="0"></ScaleTransform>
+							<ScaleTransform ScaleX="6" ScaleY="6" CenterX="0" CenterY="0"></ScaleTransform>
 						</Canvas.RenderTransform>
 					</Canvas>
 				</ItemsPanelTemplate>

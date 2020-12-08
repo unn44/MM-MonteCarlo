@@ -155,12 +155,12 @@ namespace MM_MonteCarlo
                 if (par.X == _maxX - 1) _rightBorder = true; //атом достиг правой границы (т.е. это последний МКШ)
             }
             
-            for (var y = 0; y < _maxY; y += 1 + _initPeriod)
+            /*for (var y = 0; y < _maxY; y += 1 + _initPeriod)
             {
                 if (_gridStatus[0, y]) continue;
                 _particles.Add(new Particle(0, y, _diametr));
                 _gridStatus[0, y] = true;
-            }
+            }*/
         }
         
         /// <summary>
