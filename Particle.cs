@@ -66,11 +66,11 @@ namespace MM_MonteCarlo
         /// <summary>
         /// Конструктор: явная инициализация координат ячейки.
         /// </summary>
-        public Particle(int x, int y)
+        public Particle(int x, int y,double diametr)
         {
             X = x;
             Y = y;
-                
+            Diameter = diametr;
             _margin = Diameter / 2.0;
             
             Xcanvas = X - _margin;

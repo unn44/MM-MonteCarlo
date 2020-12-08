@@ -9,6 +9,11 @@ namespace MM_MonteCarlo
     public class Physical
     {
         #region Поля класса и конструктор
+
+        /// <summary>
+        /// Диаметр одной частицы.
+        /// </summary>
+        private double _diametr;
         /// <summary>
         /// Количество узлов решетки по оси Y.
         /// </summary>
@@ -86,7 +91,7 @@ namespace MM_MonteCarlo
             if (_gridStatus[par.X + 1, par.Y]) return; //узел занят!
             
             _gridStatus[++par.X, par.Y] = true; // делаем шаг вправо текущим атомом
-            _particles.Add(new Particle(0,par.Y)); // просто генерируем ещё один атом на прошлое место (неограниченный источник)
+            _particles.Add(new Particle(0,par.Y,_diametr)); // просто генерируем ещё один атом на прошлое место (неограниченный источник)
         }
 
         /// <summary>
@@ -114,11 +119,12 @@ namespace MM_MonteCarlo
         /// <param name="maxY">Количество узлов решетки по оси Y. (минимум 100)</param>
         /// <param name="maxX">Количество узлов решетки по оси X. (величина = ???)</param>
         /// <param name="initPeriod">Через какое количество узлов располагать атомы при начальной инициализации.</param>
-        public void InitAll(int maxY, int maxX, int initPeriod)
+        public void InitAll(int maxY, int maxX, int initPeriod,double diamer)
         {
             _maxY = maxY;
             _maxX = maxX;
             _initPeriod = initPeriod;
+            _diametr = diamer;
             
             GenerateInitState();
         }
@@ -133,7 +139,7 @@ namespace MM_MonteCarlo
 
             for (var y = 0; y < _maxY; y += 1 + _initPeriod)
             {
-                _particles.Add(new Particle(0,y));
+                _particles.Add(new Particle(0,y,_diametr));
                 _gridStatus[0, y] = true;
             }
         }

@@ -58,8 +58,9 @@ public class ViewModel : INotifyPropertyChanged
 		public int MaxX { get; set; } = 250;
 		public int InitPeriod { get; set; } = 0;
 		public int MaxTime { get; set; } = 5000;
+		public double Diam { get; set; } = 2;
 		#endregion
-		
+
 		public ViewModel()
 		{
 			/*var _physical = new Physical();
@@ -87,7 +88,10 @@ public class ViewModel : INotifyPropertyChanged
 			CountSteps = $"Количество МКШ: {_timerTick} ";
 			if (!StartOrStop) SetTimer();
 			
-			_physical.InitAll(MaxY, MaxX, InitPeriod);
+			_physical.InitAll(MaxY, MaxX, InitPeriod,Diam);
+			OnPropertyChanged("Diam");
+			OnPropertyChanged("MaxY");
+			OnPropertyChanged("MaxX");
 			Particles = _physical.GetParticlesCollectionInit();
 		}
 
