@@ -1,8 +1,10 @@
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Timers;
 using System.Windows.Input;
+using System.Windows.Threading;
 using MM_MonteCarlo.Annotations;
 
 namespace MM_MonteCarlo
@@ -16,8 +18,8 @@ public class ViewModel : INotifyPropertyChanged
 		{
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
-		
-		private readonly Timer _timer;
+
+		private readonly DispatcherTimer _timer;
 		private int _timerTick;
 
 		private Physical _physical;
@@ -73,8 +75,9 @@ public class ViewModel : INotifyPropertyChanged
 			}*/
 			
 			_physical = new Physical();
-			_timer = new Timer(100); // хз пока...
-			_timer.Elapsed += OnTimedEvent;
+			_timer = new DispatcherTimer(); // хз пока...
+			_timer.Interval = new System.TimeSpan(100);
+			_timer.Tick += OnTimedEvent;
 			
 			Generation();
 			
@@ -98,31 +101,30 @@ public class ViewModel : INotifyPropertyChanged
 		private void SetTimer()
 		{
 			if (StartOrStop)
-			{
-				_timer.AutoReset = true;
-				_timer.Enabled = true;
+			{ 
+				_timer.Start();
 				StartOrStop = false;
 				OnPropertyChanged(nameof(StopOrStartName));
 				OnPropertyChanged(nameof(StartOrStop));
 			}
 			else
 			{
-				_timer.Enabled = false;
+				_timer.Stop();
 				StartOrStop = true;
 				OnPropertyChanged(nameof(StopOrStartName));
 				OnPropertyChanged(nameof(StartOrStop));
 			}
 		}
 		
-		private void OnTimedEvent(object source, ElapsedEventArgs e)
+		private void OnTimedEvent(object source, EventArgs e)
 		{
 			Particles = _physical.GetParticlesCollection();
 			
 			CountSteps = $"Количество МКШ: {++_timerTick} ";
 			if (_timerTick != MaxTime && !_physical.GetRightBorderStatus()) return;
-			
+
 			//turn off the timer
-			_timer.Enabled = false;
+			_timer.Stop();
 			StartOrStop = true;
 			OnPropertyChanged(nameof(StopOrStartName));
 			OnPropertyChanged(nameof(StartOrStop));
