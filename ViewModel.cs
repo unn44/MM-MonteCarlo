@@ -57,10 +57,10 @@ public class ViewModel : INotifyPropertyChanged
 
 		#region UserVars
 		public int MaxY { get; set; } = 100;
-		public int MaxX { get; set; } = 250;
+		public int MaxX { get; set; } = 150;
 		public int InitPeriod { get; set; } = 0;
 		public int MaxTime { get; set; } = 5000;
-		public double Diam { get; set; } = 2;
+		public double Diam { get; set; } = 0.8;
 		#endregion
 
 		public ViewModel()
@@ -75,8 +75,7 @@ public class ViewModel : INotifyPropertyChanged
 			}*/
 			
 			_physical = new Physical();
-			_timer = new DispatcherTimer(); // хз пока...
-			_timer.Interval = new System.TimeSpan(100);
+			_timer = new DispatcherTimer {Interval = new TimeSpan(100000)}; // хз пока... мб стоит вынести в UI.
 			_timer.Tick += OnTimedEvent;
 			
 			Generation();

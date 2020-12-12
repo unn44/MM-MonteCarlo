@@ -68,45 +68,29 @@ namespace MM_MonteCarlo
             if (y == _maxY) return 0;
             return y;
         }
-        /// <summary>
-        /// Выбор узла для следующего шага.
-        /// </summary>
-        /// <returns>[0] - сдвиг вправо, [-1] - сдвиг вправо и вверх, [1] - сдвиг вправо и вниз.</returns>
-        private int RandomAngle()
-        {
-            var rr = _rnd.NextDouble();
-            if (0 <= rr && rr < 0.33) return -1;
-            if (rr <= 0.33 && rr < 0.66) return 0;
-            return 1;
-        }
         #endregion
 
         #region Функции, необходимые для расчёта одного МКШ
         /// <summary>
-        /// Сделать первый шаг.
+        /// Сделать шаг для одного атома.
         /// </summary>
         /// <param name="par">Атом, для которого требуется сделать шаг.</param>
-        /*private void DoFirstStep(Particle par)
+        /// <param name="isFirstStep">Если первый шаг, то атом может двигаться только вправо.</param>
+        private void DoAtomStep(Particle par, bool isFirstStep = false)
         {
-            if (_gridStatus[par.X + 1, par.Y]) return; //узел занят!
-            
-            _gridStatus[++par.X, par.Y] = true; // делаем шаг вправо текущим атомом
-            _particles.Add(new Particle(0,par.Y,_diametr)); // просто генерируем ещё один атом на прошлое место (неограниченный источник)
-        }*/
+            int curX, curY;
+            while (true)
+            {
+                curX = isFirstStep ? par.X + 1 : par.X + _rnd.Next(-1, 2); 
+                curY = isFirstStep ? par.Y : SmartY(par.Y + _rnd.Next(-1, 2));
+                if (curX != par.X || curY != par.Y) break; //защита от стояния на месте
+            }
 
-        /// <summary>
-        /// Сделать любой другой шаг (кроме первого).
-        /// </summary>
-        /// <param name="par">Атом, для которого требуется сделать шаг.</param>
-        private void DoOtherStep(Particle par, bool isFirstStep = false)
-        {
-            var curY = isFirstStep ? par.Y : SmartY(par.Y + RandomAngle());
-
-            if (_gridStatus[par.X + 1, curY]) return; //узел занят!
+            if (_gridStatus[curX, curY]) return; //узел занят!
             
             _gridStatus[par.X, par.Y] = false;
                 
-            par.X++;
+            par.X = curX;
             par.Y = curY;
                 
             _gridStatus[par.X, par.Y] = true;
@@ -148,13 +132,15 @@ namespace MM_MonteCarlo
         /// </summary>
         private void DoMCS()
         {
+            /* движение атомов */
             foreach (var par in _particles)
             {
                 if (!(_rnd.NextDouble() >= 0.75)) continue; //вероятность 1/4 сделать шаг
-                DoOtherStep(par, par.X == 0);
+                DoAtomStep(par, par.X == 0);
                 if (par.X == _maxX - 1) _rightBorder = true; //атом достиг правой границы (т.е. это последний МКШ)
             }
             
+            /* режим неограниченного источника */
             for (var y = 0; y < _maxY; y += 1 + _initPeriod)
             {
                 if (_gridStatus[0, y]) continue;

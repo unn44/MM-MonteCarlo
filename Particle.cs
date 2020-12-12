@@ -60,7 +60,7 @@ namespace MM_MonteCarlo
         /// <summary>
         /// Диаметр (размер) частицы. Одинаковый для всех частиц.
         /// </summary>
-        public double Diameter { get; set; } = 0.7;
+        public double Diameter { get; set; }
         
 
         /// <summary>
