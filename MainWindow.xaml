@@ -103,6 +103,13 @@
 			
 			<Label FontWeight="DemiBold" FontSize="14"  Content="{Binding CountSteps, UpdateSourceTrigger=PropertyChanged}" Margin="0,10,0,0"/>
 			<Label FontWeight="DemiBold" FontSize="14"  Content="{Binding InfoTimeI, UpdateSourceTrigger=PropertyChanged}" Margin="0,20,0,0"/>
+			
+			<Label Content="C0"/>
+			<TextBox Text="{Binding C0, UpdateSourceTrigger=LostFocus}"/>
+			<Label Content="D"/>
+			<TextBox Text="{Binding D, UpdateSourceTrigger=LostFocus}"/>
+			<Button Content="Получить распределение" Command="{Binding CalcTheory}" Margin="0,10,0,0"
+			        IsEnabled="{Binding IsTheoryAvailable}"/>
 		</StackPanel>
 	</Grid>
 </Window>

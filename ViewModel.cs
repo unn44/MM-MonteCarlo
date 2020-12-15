@@ -30,6 +30,7 @@ public class ViewModel : INotifyPropertyChanged
 		
 		public bool StartOrStop { get; set; } = true;
 		public bool DrawMode { get; set; }
+		public bool IsTheoryAvailable { get; set; } = false;
 		public string StopOrStartName => StartOrStop ? "Запустить" : "Приостановить";
 		
 		private string _countSteps, _infoTimeI;
@@ -68,6 +69,7 @@ public class ViewModel : INotifyPropertyChanged
 		#region RelayCommands
 		public ICommand Generate { get; set; }
 		public ICommand Start { get; set; }
+		public ICommand CalcTheory { get; set; }
 		#endregion
 
 		#region Charts
@@ -109,6 +111,8 @@ public class ViewModel : INotifyPropertyChanged
 		public int InitPeriod { get; set; } = 0;
 		public int MaxTime { get; set; } = 5000;
 		public double Diam { get; set; } = 0.8;
+		public double C0 { get; set; } = 100;
+		public double D { get; set; } = 0.1;
 		#endregion
 
 		public ViewModel()
@@ -131,6 +135,7 @@ public class ViewModel : INotifyPropertyChanged
 			
 			Generate = new RelayCommand(o => Generation());
 			Start = new RelayCommand(o => SetTimer());
+			CalcTheory = new RelayCommand(o => CalcTheoreticalDistribution());
 		}
 		
 		private void Generation()
@@ -148,6 +153,9 @@ public class ViewModel : INotifyPropertyChanged
 			
 			DrawMode = MaxY <= 120;
 			OnPropertyChanged(nameof(DrawMode));
+			
+			IsTheoryAvailable = false;
+			OnPropertyChanged(nameof(IsTheoryAvailable));
 
 			InvalidateFlagExp = 0;
 			PointsT1exp.Clear();
@@ -164,6 +172,9 @@ public class ViewModel : INotifyPropertyChanged
 			_t2Tick = _t1Tick * 2;
 			_t3Tick = _t1Tick * 3;
 			_t4Tick = MaxTime;
+
+			C0 = MaxY;
+			IsTheoryAvailable = true;
 			
 			InfoTimeI = $"tMax = {MaxTime} МКШ\n\nt1 = {_t1Tick} МКШ\nt2 = {_t2Tick} МКШ\nt3 = {_t3Tick} МКШ\nt4 = {_t4Tick} МКШ\n";
 
@@ -183,6 +194,8 @@ public class ViewModel : INotifyPropertyChanged
 			OnPropertyChanged(nameof(StopOrStartName));
 			OnPropertyChanged(nameof(StartOrStop));
 			OnPropertyChanged(nameof(DrawMode));
+			OnPropertyChanged(nameof(C0));
+			OnPropertyChanged(nameof(IsTheoryAvailable));
 		}
 		
 		private void OnTimedEvent(object source, EventArgs e)
@@ -217,6 +230,31 @@ public class ViewModel : INotifyPropertyChanged
 				}
 				InvalidateFlagExp++;
 				points.Add(new DataPoint(i, atoms));
+			}
+		}
+
+		private void CalcTheoreticalDistribution()
+		{
+			InvalidateFlagTheory = 0;
+			
+			PointsT1theory.Clear();
+			PointsT2theory.Clear();
+			PointsT3theory.Clear();
+			PointsT4theory.Clear();
+			
+			DrawTheoreticalDistribution(PointsT1theory, _t1Tick);
+			DrawTheoreticalDistribution(PointsT2theory, _t2Tick);
+			DrawTheoreticalDistribution(PointsT3theory, _t3Tick);
+			DrawTheoreticalDistribution(PointsT4theory, _t4Tick);
+		}
+		
+		private void DrawTheoreticalDistribution(List<DataPoint> points, int time)
+		{
+			for (var x = 0; x < MaxX; x++)
+			{
+				var argument = x / (2 * Math.Sqrt(D * time));
+				InvalidateFlagTheory++;
+				points.Add(new DataPoint(x, TheorDistrib.Cfunc(C0,argument)));
 			}
 		}
 	}
