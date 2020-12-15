@@ -20,9 +20,9 @@
 		<ItemsControl ItemsSource="{Binding Particles,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
 		              HorizontalAlignment="Left" VerticalAlignment="Top"
 		              Margin="5"
-		              
-		              Width="{Binding MaxX}"
-		              Height="{Binding MaxY}">
+		              BorderBrush="#adb5bd" BorderThickness="{Binding CanvasBorderThickness}"
+		              Width="{Binding CanvasX}"
+		              Height="{Binding CanvasY}">
 			
 			<ItemsControl.Style>
 				<Style TargetType="{x:Type ItemsControl}">
@@ -39,10 +39,10 @@
 			
 			<ItemsControl.ItemsPanel>
 				<ItemsPanelTemplate>
-					<Canvas Background="GhostWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Width="{Binding MaxX,Mode=TwoWay}" Height="{Binding MaxY,Mode=TwoWay}"
+					<Canvas Background="#f8f9fa" HorizontalAlignment="Left" VerticalAlignment="Top" Width="{Binding MaxX,Mode=TwoWay}" Height="{Binding MaxY,Mode=TwoWay}"
 					        ClipToBounds="True" IsItemsHost="False">
 						<Canvas.RenderTransform>
-							<ScaleTransform ScaleX="8" ScaleY="8" CenterX="0" CenterY="0"></ScaleTransform>
+							<ScaleTransform ScaleX="{Binding CanvasScale}" ScaleY="{Binding CanvasScale}" CenterX="0" CenterY="0"></ScaleTransform>
 						</Canvas.RenderTransform>
 					</Canvas>
 				</ItemsPanelTemplate>
@@ -50,15 +50,15 @@
 
 			<ItemsControl.ItemContainerStyle>
 				<Style TargetType="ContentPresenter">
-					<Setter Property="Canvas.Left" Value="{Binding  Xcanvas , Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
-					<Setter Property="Canvas.Top" Value="{Binding  Ycanvas, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+					<Setter Property="Canvas.Left" Value="{Binding  X , Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+					<Setter Property="Canvas.Top" Value="{Binding  Y, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
 
 				</Style>
 			</ItemsControl.ItemContainerStyle>
 
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
-					<Ellipse Fill="MidnightBlue" Width="{Binding Diameter}" Height="{Binding Diameter}" >
+					<Ellipse Fill="#2a9d8f" Width="{Binding Diameter}" Height="{Binding Diameter}" >
 					</Ellipse>
 				</DataTemplate>
 			</ItemsControl.ItemTemplate>
@@ -67,7 +67,7 @@
 		
 		<StackPanel Grid.Column="1">
 			<oxy:Plot  InvalidateFlag="{Binding InvalidateFlagExp}" Title="Экспериментальное распределение примеси"
-			           Margin="10,10,20,10" Height="310" Width="420" HorizontalAlignment="Right">
+			           Margin="10,10,20,10" Height="310" HorizontalAlignment="Stretch">
 				<oxy:Plot.Series>
 					<oxy:LineSeries ItemsSource="{Binding PointsT1exp}" Title="t1"/>
 					<oxy:LineSeries ItemsSource="{Binding PointsT2exp}" Title="t2"/>
@@ -76,7 +76,7 @@
 				</oxy:Plot.Series>
 			</oxy:Plot>
 			<oxy:Plot  InvalidateFlag="{Binding InvalidateFlagTheory}" Title="Теоретическое распределение примеси"
-			           Margin="10,10,20,10" Height="310" Width="420" HorizontalAlignment="Right">
+			           Margin="10,10,20,10" Height="310" HorizontalAlignment="Stretch">
 				<oxy:Plot.Series>
 					<oxy:LineSeries ItemsSource="{Binding PointsT1theory}" Title="t1"/>
 					<oxy:LineSeries ItemsSource="{Binding PointsT2theory}" Title="t2"/>

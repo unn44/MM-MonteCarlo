@@ -67,6 +67,11 @@ public class ViewModel : INotifyPropertyChanged
 			}
 		}
 		
+		public double CanvasBorderThickness { get; set; } = 2;
+		public double CanvasScale { get; set; } = 8;
+		public double CanvasX { get; set; }
+		public double CanvasY { get; set; }
+		
 		#region RelayCommands
 		public ICommand Generate { get; set; }
 		public ICommand Start { get; set; }
@@ -107,12 +112,12 @@ public class ViewModel : INotifyPropertyChanged
 		#endregion
 
 		#region UserVars
-		public int MaxY { get; set; } = 100;
+		public int MaxY { get; set; } = 102;
 		public int MaxX { get; set; } = 125;
 		public int InitPeriod { get; set; } = 0;
 		public int MaxTime { get; set; } = 5000;
 		public double Diam { get; set; } = 0.8;
-		public double C0 { get; set; } = 100;
+		public double C0 { get; set; } = 102;
 		public double D { get; set; } = 0.1;
 		#endregion
 
@@ -155,6 +160,12 @@ public class ViewModel : INotifyPropertyChanged
 			OnPropertyChanged("Diam");
 			OnPropertyChanged("MaxY");
 			OnPropertyChanged("MaxX");
+
+			CanvasX = MaxX * CanvasScale + CanvasBorderThickness * 2;
+			CanvasY = MaxY * CanvasScale + CanvasBorderThickness * 2;
+			OnPropertyChanged(nameof(CanvasX));
+			OnPropertyChanged(nameof(CanvasY));
+			
 			Particles = _physical.GetParticlesCollectionInit();
 			
 			DrawMode = MaxY <= 120;
