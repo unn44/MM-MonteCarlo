@@ -22,19 +22,31 @@ public class ViewModel : INotifyPropertyChanged
 		private readonly DispatcherTimer _timer;
 		private int _timerTick;
 
+		private int _t1Tick, _t2Tick, _t3Tick, _t4Tick; 
+
 		private Physical _physical;
 		
 		public bool StartOrStop { get; set; } = true;
 		public bool DrawMode { get; set; }
 		public string StopOrStartName => StartOrStop ? "Запустить" : "Приостановить";
 		
-		private string _countSteps;
+		private string _countSteps, _infoTimeI;
 		public string CountSteps
 		{
 			get => _countSteps;
 			set
 			{
 				_countSteps = value;
+				OnPropertyChanged();
+			}
+		}
+		
+		public string InfoTimeI
+		{
+			get => _infoTimeI;
+			set
+			{
+				_infoTimeI = value;
 				OnPropertyChanged();
 			}
 		}
@@ -80,6 +92,7 @@ public class ViewModel : INotifyPropertyChanged
 		{
 			_timerTick = 0;
 			CountSteps = $"Количество МКШ: {_timerTick} ";
+			InfoTimeI = "";
 			if (!StartOrStop) SetTimer();
 			
 			_physical.InitAll(MaxY, MaxX, InitPeriod,Diam);
@@ -94,36 +107,59 @@ public class ViewModel : INotifyPropertyChanged
 
 		private void SetTimer()
 		{
+			_t1Tick = (int)Math.Round(MaxTime / 4.0);
+			_t2Tick = _t1Tick * 2;
+			_t3Tick = _t1Tick * 3;
+			_t4Tick = MaxTime;
+			
+			InfoTimeI = $"tMax = {MaxTime} МКШ\n\nt1 = {_t1Tick} МКШ\nt2 = {_t2Tick} МКШ\nt3 = {_t3Tick} МКШ\nt4 = {_t4Tick} МКШ\n";
+
 			if (StartOrStop)
 			{ 
 				_timer.Start();
 				StartOrStop = false;
 				//DrawMode = MaxY <= 120;
-				OnPropertyChanged(nameof(StopOrStartName));
-				OnPropertyChanged(nameof(StartOrStop));
-				OnPropertyChanged(nameof(DrawMode));
 			}
 			else
 			{
 				_timer.Stop();
 				StartOrStop = true;
 				//DrawMode = MaxY <= 120;
-				OnPropertyChanged(nameof(StopOrStartName));
-				OnPropertyChanged(nameof(StartOrStop));
-				OnPropertyChanged(nameof(DrawMode));
 			}
+			
+			OnPropertyChanged(nameof(StopOrStartName));
+			OnPropertyChanged(nameof(StartOrStop));
+			OnPropertyChanged(nameof(DrawMode));
 		}
 		
 		private void OnTimedEvent(object source, EventArgs e)
 		{
-			//todo:disable visualisation
-			
-			
 			Particles = _physical.GetParticlesCollection();
 			
 			CountSteps = $"Количество МКШ: {++_timerTick} ";
-			if (_timerTick != MaxTime && !_physical.GetRightBorderStatus()) return;
 
+			if (_timerTick == _t1Tick)
+			{
+				//TODO: save and draw
+			}
+			
+			if (_timerTick == _t2Tick)
+			{
+				//TODO: save and draw
+			}
+			
+			if (_timerTick == _t3Tick)
+			{
+				//TODO: save and draw
+			}
+			
+			if (_timerTick == _t4Tick)
+			{
+				//TODO: save and draw
+			}
+			
+			if (_timerTick != MaxTime && !_physical.GetRightBorderStatus()) return;
+			
 			//turn off the timer
 			_timer.Stop();
 			StartOrStop = true;
