@@ -117,6 +117,16 @@ public class ViewModel : INotifyPropertyChanged
 			_timer = new DispatcherTimer {Interval = new TimeSpan(100000)}; // хз пока... мб стоит вынести в UI.
 			_timer.Tick += OnTimedEvent;
 
+			PointsT1exp = new List<DataPoint>();
+			PointsT2exp = new List<DataPoint>();
+			PointsT3exp = new List<DataPoint>();
+			PointsT4exp = new List<DataPoint>();
+			
+			PointsT1theory = new List<DataPoint>();
+			PointsT2theory = new List<DataPoint>();
+			PointsT3theory = new List<DataPoint>();
+			PointsT4theory = new List<DataPoint>();
+			
 			Generation();
 			
 			Generate = new RelayCommand(o => Generation());
@@ -138,6 +148,12 @@ public class ViewModel : INotifyPropertyChanged
 			
 			DrawMode = MaxY <= 120;
 			OnPropertyChanged(nameof(DrawMode));
+
+			InvalidateFlagExp = 0;
+			PointsT1exp.Clear();
+			PointsT2exp.Clear();
+			PointsT3exp.Clear();
+			PointsT4exp.Clear();
 		}
 
 		private void SetTimer()
@@ -173,25 +189,10 @@ public class ViewModel : INotifyPropertyChanged
 			
 			CountSteps = $"Количество МКШ: {++_timerTick} ";
 
-			if (_timerTick == _t1Tick)
-			{
-				//TODO: save and draw
-			}
-			
-			if (_timerTick == _t2Tick)
-			{
-				//TODO: save and draw
-			}
-			
-			if (_timerTick == _t3Tick)
-			{
-				//TODO: save and draw
-			}
-			
-			if (_timerTick == _t4Tick)
-			{
-				//TODO: save and draw
-			}
+			if (_timerTick == _t1Tick) DrawImpurityDistribution(PointsT1exp);
+			if (_timerTick == _t2Tick) DrawImpurityDistribution(PointsT2exp);
+			if (_timerTick == _t3Tick) DrawImpurityDistribution(PointsT3exp);
+			if (_timerTick == _t4Tick) DrawImpurityDistribution(PointsT4exp);
 			
 			if (_timerTick != MaxTime && !_physical.GetRightBorderStatus()) return;
 			
@@ -200,6 +201,21 @@ public class ViewModel : INotifyPropertyChanged
 			StartOrStop = true;
 			OnPropertyChanged(nameof(StopOrStartName));
 			OnPropertyChanged(nameof(StartOrStop));
+		}
+
+		private void DrawImpurityDistribution(List<DataPoint> points)
+		{
+			var gridStat = _physical.GetGridStatus();
+			for (var i = 0; i < MaxX; i++)
+			{
+				var atoms = 0;
+				for (var j = 0; j < MaxY; j++)
+				{
+					if (gridStat[i, j]) atoms++;
+				}
+				InvalidateFlagExp++;
+				points.Add(new DataPoint(i, atoms));
+			}
 		}
 	}
 }

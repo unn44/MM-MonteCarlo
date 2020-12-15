@@ -69,19 +69,19 @@
 			<oxy:Plot  InvalidateFlag="{Binding InvalidateFlagExp}" Title="Экспериментальное распределение примеси"
 			           Margin="10,10,20,10" Height="310" Width="420" HorizontalAlignment="Right">
 				<oxy:Plot.Series>
-					<oxy:LineSeries ItemsSource="{Binding PointsT1exp}"/>
-					<oxy:LineSeries ItemsSource="{Binding PointsT2exp}"/>
-					<oxy:LineSeries ItemsSource="{Binding PointsT3exp}"/>
-					<oxy:LineSeries ItemsSource="{Binding PointsT4exp}"/>
+					<oxy:LineSeries ItemsSource="{Binding PointsT1exp}" Title="t1"/>
+					<oxy:LineSeries ItemsSource="{Binding PointsT2exp}" Title="t2"/>
+					<oxy:LineSeries ItemsSource="{Binding PointsT3exp}" Title="t3"/>
+					<oxy:LineSeries ItemsSource="{Binding PointsT4exp}" Title="t4"/>
 				</oxy:Plot.Series>
 			</oxy:Plot>
 			<oxy:Plot  InvalidateFlag="{Binding InvalidateFlagTheory}" Title="Теоретическое распределение примеси"
 			           Margin="10,10,20,10" Height="310" Width="420" HorizontalAlignment="Right">
 				<oxy:Plot.Series>
-					<oxy:LineSeries ItemsSource="{Binding PointsT1theory}"/>
-					<oxy:LineSeries ItemsSource="{Binding PointsT2theory}"/>
-					<oxy:LineSeries ItemsSource="{Binding PointsT3theory}"/>
-					<oxy:LineSeries ItemsSource="{Binding PointsT4theory}"/>
+					<oxy:LineSeries ItemsSource="{Binding PointsT1theory}" Title="t1"/>
+					<oxy:LineSeries ItemsSource="{Binding PointsT2theory}" Title="t2"/>
+					<oxy:LineSeries ItemsSource="{Binding PointsT3theory}" Title="t3"/>
+					<oxy:LineSeries ItemsSource="{Binding PointsT4theory}" Title="t4"/>
 				</oxy:Plot.Series>
 			</oxy:Plot>
 		</StackPanel>
