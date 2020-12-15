@@ -25,6 +25,7 @@ public class ViewModel : INotifyPropertyChanged
 		private Physical _physical;
 		
 		public bool StartOrStop { get; set; } = true;
+		public bool DrawMode { get; set; }
 		public string StopOrStartName => StartOrStop ? "Запустить" : "Приостановить";
 		
 		private string _countSteps;
@@ -57,7 +58,7 @@ public class ViewModel : INotifyPropertyChanged
 
 		#region UserVars
 		public int MaxY { get; set; } = 100;
-		public int MaxX { get; set; } = 150;
+		public int MaxX { get; set; } = 125;
 		public int InitPeriod { get; set; } = 0;
 		public int MaxTime { get; set; } = 5000;
 		public double Diam { get; set; } = 0.8;
@@ -65,19 +66,10 @@ public class ViewModel : INotifyPropertyChanged
 
 		public ViewModel()
 		{
-			/*var _physical = new Physical();
-			ObservableCollection<Particle> particles;
-			_physical.InitAll(100,500,0);
-			for (var i = 0; i < 500; i++)
-			{
-				particles = _physical.GetParticlesCollection();
-				var gridStatus = _physical.GetGridStatus();
-			}*/
-			
 			_physical = new Physical();
 			_timer = new DispatcherTimer {Interval = new TimeSpan(100000)}; // хз пока... мб стоит вынести в UI.
 			_timer.Tick += OnTimedEvent;
-			
+
 			Generation();
 			
 			Generate = new RelayCommand(o => Generation());
@@ -95,6 +87,9 @@ public class ViewModel : INotifyPropertyChanged
 			OnPropertyChanged("MaxY");
 			OnPropertyChanged("MaxX");
 			Particles = _physical.GetParticlesCollectionInit();
+			
+			DrawMode = MaxY <= 120;
+			OnPropertyChanged(nameof(DrawMode));
 		}
 
 		private void SetTimer()
@@ -103,20 +98,27 @@ public class ViewModel : INotifyPropertyChanged
 			{ 
 				_timer.Start();
 				StartOrStop = false;
+				//DrawMode = MaxY <= 120;
 				OnPropertyChanged(nameof(StopOrStartName));
 				OnPropertyChanged(nameof(StartOrStop));
+				OnPropertyChanged(nameof(DrawMode));
 			}
 			else
 			{
 				_timer.Stop();
 				StartOrStop = true;
+				//DrawMode = MaxY <= 120;
 				OnPropertyChanged(nameof(StopOrStartName));
 				OnPropertyChanged(nameof(StartOrStop));
+				OnPropertyChanged(nameof(DrawMode));
 			}
 		}
 		
 		private void OnTimedEvent(object source, EventArgs e)
 		{
+			//todo:disable visualisation
+			
+			
 			Particles = _physical.GetParticlesCollection();
 			
 			CountSteps = $"Количество МКШ: {++_timerTick} ";
