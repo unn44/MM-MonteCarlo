@@ -30,6 +30,7 @@ public class ViewModel : INotifyPropertyChanged
 		
 		public bool StartOrStop { get; set; } = true;
 		public bool DrawMode { get; set; }
+		public bool ThirdMode { get; set; }
 		public bool IsTheoryAvailable { get; set; } = false;
 		public string StopOrStartName => StartOrStop ? "Запустить" : "Приостановить";
 		
@@ -144,8 +145,13 @@ public class ViewModel : INotifyPropertyChanged
 			CountSteps = $"Количество МКШ: {_timerTick} ";
 			InfoTimeI = "";
 			if (!StartOrStop) SetTimer();
+
+			ThirdMode = MaxY%3 == 0 && ThirdMode;
+			OnPropertyChanged(nameof(ThirdMode));
+			if (ThirdMode) InitPeriod = 0;
+			OnPropertyChanged(nameof(InitPeriod));
 			
-			_physical.InitAll(MaxY, MaxX, InitPeriod,Diam);
+			_physical.InitAll(MaxY, MaxX, InitPeriod,Diam, ThirdMode);
 			OnPropertyChanged("Diam");
 			OnPropertyChanged("MaxY");
 			OnPropertyChanged("MaxX");
@@ -153,7 +159,7 @@ public class ViewModel : INotifyPropertyChanged
 			
 			DrawMode = MaxY <= 120;
 			OnPropertyChanged(nameof(DrawMode));
-			
+
 			IsTheoryAvailable = false;
 			OnPropertyChanged(nameof(IsTheoryAvailable));
 
@@ -177,6 +183,11 @@ public class ViewModel : INotifyPropertyChanged
 			IsTheoryAvailable = true;
 			
 			InfoTimeI = $"tMax = {MaxTime} МКШ\n\nt1 = {_t1Tick} МКШ\nt2 = {_t2Tick} МКШ\nt3 = {_t3Tick} МКШ\nt4 = {_t4Tick} МКШ\n";
+			
+			ThirdMode = MaxY%3 == 0 && ThirdMode;
+			OnPropertyChanged(nameof(ThirdMode));
+			if (ThirdMode) InitPeriod = 0;
+			OnPropertyChanged(nameof(InitPeriod));
 
 			if (StartOrStop)
 			{ 
@@ -228,6 +239,9 @@ public class ViewModel : INotifyPropertyChanged
 				{
 					if (gridStat[i, j]) atoms++;
 				}
+
+				if (ThirdMode && i == 0) atoms -= MaxY / 3 * 2;
+				
 				InvalidateFlagExp++;
 				points.Add(new DataPoint(i, atoms));
 			}

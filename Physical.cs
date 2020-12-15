@@ -27,6 +27,10 @@ namespace MM_MonteCarlo
         /// </summary>
         private int _initPeriod;
         /// <summary>
+        /// Включен ли режим одной трети?
+        /// </summary>
+        private bool _thirdMode;
+        /// <summary>
         /// Состояние всех узлов решетки.
         /// true - узел занят, false - узел свободен.
         /// Координаты узла представлены следующим образом [x,y].
@@ -103,12 +107,13 @@ namespace MM_MonteCarlo
         /// <param name="maxY">Количество узлов решетки по оси Y. (минимум 100)</param>
         /// <param name="maxX">Количество узлов решетки по оси X. (величина = ???)</param>
         /// <param name="initPeriod">Через какое количество узлов располагать атомы при начальной инициализации.</param>
-        public void InitAll(int maxY, int maxX, int initPeriod,double diameter)
+        public void InitAll(int maxY, int maxX, int initPeriod,double diameter, bool thirdMode)
         {
             _maxY = maxY;
             _maxX = maxX;
             _initPeriod = initPeriod;
             _diametr = diameter;
+            _thirdMode = thirdMode;
             
             GenerateInitState();
         }
@@ -121,10 +126,24 @@ namespace MM_MonteCarlo
             _particles.Clear();
             _rightBorder = false;
 
-            for (var y = 0; y < _maxY; y += 1 + _initPeriod)
+            if (!_thirdMode)
             {
-                _particles.Add(new Particle(0,y,_diametr));
-                _gridStatus[0, y] = true;
+                for (var y = 0; y < _maxY; y += 1 + _initPeriod)
+                {
+                    _particles.Add(new Particle(0, y, _diametr));
+                    _gridStatus[0, y] = true;
+                }
+            }
+            else
+            {
+                var deltaY = _maxY / 3;
+                for (var y=0; y < deltaY; y++) _gridStatus[0, y] = true;
+                for (var y = deltaY; y < deltaY * 2; y++)
+                {
+                    _particles.Add(new Particle(0, y, _diametr));
+                    _gridStatus[0, y] = true;
+                }
+                for (var y = deltaY * 2; y <_maxY; y++) _gridStatus[0, y] = true;
             }
         }
         /// <summary>

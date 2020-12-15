@@ -96,6 +96,7 @@
 			<Label Content="Время диффузии (tmax)" Margin="0,10,0,0"/>
 			<TextBox Text="{Binding MaxTime, UpdateSourceTrigger=LostFocus}"/>
 			
+			<CheckBox Content=" Режим 1/3" Margin="1,10,0,10" IsChecked="{Binding ThirdMode, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 			<CheckBox Content=" Отрисовка" Margin="1,10,0,10" IsChecked="{Binding DrawMode, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 			
 			<Button Content="Сгенерировать" Command="{Binding Generate}" Margin="0,10,0,0"/>
