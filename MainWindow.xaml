@@ -66,7 +66,24 @@
 		</ItemsControl>
 		
 		<StackPanel Grid.Column="1">
-			<!-- Здесь будут жить графики  -->
+			<oxy:Plot  InvalidateFlag="{Binding InvalidateFlagExp}" Title="Экспериментальное распределение примеси"
+			           Margin="10,10,20,10" Height="310" Width="420" HorizontalAlignment="Right">
+				<oxy:Plot.Series>
+					<oxy:LineSeries ItemsSource="{Binding PointsT1exp}"/>
+					<oxy:LineSeries ItemsSource="{Binding PointsT2exp}"/>
+					<oxy:LineSeries ItemsSource="{Binding PointsT3exp}"/>
+					<oxy:LineSeries ItemsSource="{Binding PointsT4exp}"/>
+				</oxy:Plot.Series>
+			</oxy:Plot>
+			<oxy:Plot  InvalidateFlag="{Binding InvalidateFlagTheory}" Title="Теоретическое распределение примеси"
+			           Margin="10,10,20,10" Height="310" Width="420" HorizontalAlignment="Right">
+				<oxy:Plot.Series>
+					<oxy:LineSeries ItemsSource="{Binding PointsT1theory}"/>
+					<oxy:LineSeries ItemsSource="{Binding PointsT2theory}"/>
+					<oxy:LineSeries ItemsSource="{Binding PointsT3theory}"/>
+					<oxy:LineSeries ItemsSource="{Binding PointsT4theory}"/>
+				</oxy:Plot.Series>
+			</oxy:Plot>
 		</StackPanel>
 		<StackPanel Grid.Column="2" Margin="0,0,10,0">
 			<Label Content="Число узлов по оси Y"/>

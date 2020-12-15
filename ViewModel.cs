@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -6,6 +7,7 @@ using System.Timers;
 using System.Windows.Input;
 using System.Windows.Threading;
 using MM_MonteCarlo.Annotations;
+using OxyPlot;
 
 namespace MM_MonteCarlo
 {
@@ -66,6 +68,39 @@ public class ViewModel : INotifyPropertyChanged
 		#region RelayCommands
 		public ICommand Generate { get; set; }
 		public ICommand Start { get; set; }
+		#endregion
+
+		#region Charts
+
+		private int _invalidateFlagExp, _invalidateFlagTheory;
+		public int InvalidateFlagExp
+		{
+			get => _invalidateFlagExp;
+			set
+			{
+				_invalidateFlagExp = value;
+				OnPropertyChanged();
+			}
+		}
+		public int InvalidateFlagTheory
+		{
+			get => _invalidateFlagTheory;
+			set
+			{
+				_invalidateFlagTheory = value;
+				OnPropertyChanged();
+			}
+		}
+		
+		public List<DataPoint> PointsT1exp { get; set; }
+		public List<DataPoint> PointsT2exp { get; set; }
+		public List<DataPoint> PointsT3exp { get; set; }
+		public List<DataPoint> PointsT4exp { get; set; }
+		
+		public List<DataPoint> PointsT1theory { get; set; }
+		public List<DataPoint> PointsT2theory { get; set; }
+		public List<DataPoint> PointsT3theory { get; set; }
+		public List<DataPoint> PointsT4theory { get; set; }
 		#endregion
 
 		#region UserVars
