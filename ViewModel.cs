@@ -114,7 +114,7 @@ public class ViewModel : INotifyPropertyChanged
 		public ViewModel()
 		{
 			_physical = new Physical();
-			_timer = new DispatcherTimer {Interval = new TimeSpan(100000)}; // хз пока... мб стоит вынести в UI.
+			_timer = new DispatcherTimer();
 			_timer.Tick += OnTimedEvent;
 
 			PointsT1exp = new List<DataPoint>();
@@ -158,6 +158,8 @@ public class ViewModel : INotifyPropertyChanged
 
 		private void SetTimer()
 		{
+			_timer.Interval = new TimeSpan(DrawMode ? 100000 : 1);
+			
 			_t1Tick = (int)Math.Round(MaxTime / 4.0);
 			_t2Tick = _t1Tick * 2;
 			_t3Tick = _t1Tick * 3;
