@@ -24,8 +24,6 @@ public class ViewModel : INotifyPropertyChanged
 		private readonly DispatcherTimer _timer;
 		private int _timerTick;
 
-		private int _t1Tick, _t2Tick, _t3Tick, _t4Tick; 
-
 		private Physical _physical;
 		
 		public bool StartOrStop { get; set; } = true;
@@ -119,6 +117,11 @@ public class ViewModel : INotifyPropertyChanged
 		public double Diam { get; set; } = 0.8;
 		public double C0 { get; set; } = 102;
 		public double D { get; set; } = 0.1;
+		
+		public int T1Tick { get; set; }
+		public int T2Tick { get; set; }
+		public int T3Tick { get; set; }
+		public int T4Tick { get; set; }
 		#endregion
 
 		public ViewModel()
@@ -179,22 +182,27 @@ public class ViewModel : INotifyPropertyChanged
 			PointsT2exp.Clear();
 			PointsT3exp.Clear();
 			PointsT4exp.Clear();
+			
+			T1Tick = (int)Math.Round(MaxTime / 9.0);
+			T2Tick = T1Tick * 4;
+			T3Tick = MaxTime;
+
+			OnPropertyChanged(nameof(T1Tick));
+			OnPropertyChanged(nameof(T2Tick));
+			OnPropertyChanged(nameof(T3Tick));
 		}
 
 		private void SetTimer()
 		{
 			_timer.Interval = new TimeSpan(DrawMode ? 100000 : 1);
-			
-			_t1Tick = (int)Math.Round(MaxTime / 4.0);
-			_t2Tick = _t1Tick * 2;
-			_t3Tick = _t1Tick * 3;
-			_t4Tick = MaxTime;
 
+			OnPropertyChanged(nameof(T1Tick));
+			OnPropertyChanged(nameof(T2Tick));
+			OnPropertyChanged(nameof(T3Tick));
+			
 			C0 = MaxY;
 			IsTheoryAvailable = true;
-			
-			InfoTimeI = $"tMax = {MaxTime} МКШ\n\nt1 = {_t1Tick} МКШ\nt2 = {_t2Tick} МКШ\nt3 = {_t3Tick} МКШ\nt4 = {_t4Tick} МКШ\n";
-			
+
 			ThirdMode = MaxY%3 == 0 && ThirdMode;
 			OnPropertyChanged(nameof(ThirdMode));
 			if (ThirdMode) InitPeriod = 0;
@@ -226,11 +234,10 @@ public class ViewModel : INotifyPropertyChanged
 			
 			CountSteps = $"Количество МКШ: {++_timerTick} ";
 
-			if (_timerTick == _t1Tick) DrawImpurityDistribution(PointsT1exp);
-			if (_timerTick == _t2Tick) DrawImpurityDistribution(PointsT2exp);
-			if (_timerTick == _t3Tick) DrawImpurityDistribution(PointsT3exp);
-			if (_timerTick == _t4Tick) DrawImpurityDistribution(PointsT4exp);
-			
+			if (_timerTick == T1Tick) DrawImpurityDistribution(PointsT1exp);
+			if (_timerTick == T2Tick) DrawImpurityDistribution(PointsT2exp);
+			if (_timerTick == T3Tick) DrawImpurityDistribution(PointsT3exp);
+
 			if (_timerTick != MaxTime && !_physical.GetRightBorderStatus()) return;
 			
 			//turn off the timer
@@ -267,10 +274,9 @@ public class ViewModel : INotifyPropertyChanged
 			PointsT3theory.Clear();
 			PointsT4theory.Clear();
 			
-			DrawTheoreticalDistribution(PointsT1theory, _t1Tick);
-			DrawTheoreticalDistribution(PointsT2theory, _t2Tick);
-			DrawTheoreticalDistribution(PointsT3theory, _t3Tick);
-			DrawTheoreticalDistribution(PointsT4theory, _t4Tick);
+			DrawTheoreticalDistribution(PointsT1theory, T1Tick);
+			DrawTheoreticalDistribution(PointsT2theory, T2Tick);
+			DrawTheoreticalDistribution(PointsT3theory, T3Tick);
 		}
 		
 		private void DrawTheoreticalDistribution(List<DataPoint> points, int time)

@@ -72,7 +72,6 @@
 					<oxy:LineSeries ItemsSource="{Binding PointsT1exp}" Title="t1"/>
 					<oxy:LineSeries ItemsSource="{Binding PointsT2exp}" Title="t2"/>
 					<oxy:LineSeries ItemsSource="{Binding PointsT3exp}" Title="t3"/>
-					<oxy:LineSeries ItemsSource="{Binding PointsT4exp}" Title="t4"/>
 				</oxy:Plot.Series>
 			</oxy:Plot>
 			<oxy:Plot  InvalidateFlag="{Binding InvalidateFlagTheory}" Title="Теоретическое распределение примеси"
@@ -81,7 +80,6 @@
 					<oxy:LineSeries ItemsSource="{Binding PointsT1theory}" Title="t1"/>
 					<oxy:LineSeries ItemsSource="{Binding PointsT2theory}" Title="t2"/>
 					<oxy:LineSeries ItemsSource="{Binding PointsT3theory}" Title="t3"/>
-					<oxy:LineSeries ItemsSource="{Binding PointsT4theory}" Title="t4"/>
 				</oxy:Plot.Series>
 			</oxy:Plot>
 		</StackPanel>
@@ -95,17 +93,22 @@
 
 			<Label Content="Время диффузии (tmax)" Margin="0,10,0,0"/>
 			<TextBox Text="{Binding MaxTime, UpdateSourceTrigger=LostFocus}"/>
+			<Label Content="t1" Margin="0,10,0,0"/>
+			<TextBox Text="{Binding T1Tick, UpdateSourceTrigger=LostFocus}"/>
+			<Label Content="t2"/>
+			<TextBox Text="{Binding T2Tick, UpdateSourceTrigger=LostFocus}"/>
+			<Label Content="t3"/>
+			<TextBox Text="{Binding T3Tick, UpdateSourceTrigger=LostFocus}"/>
 			
-			<CheckBox Content=" Режим 1/3" Margin="1,10,0,10" IsChecked="{Binding ThirdMode, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+			<CheckBox Content=" Режим 1/3" Margin="1,15,0,10" IsChecked="{Binding ThirdMode, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 			<CheckBox Content=" Отрисовка" Margin="1,10,0,10" IsChecked="{Binding DrawMode, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 			
 			<Button Content="Сгенерировать" Command="{Binding Generate}" Margin="0,10,0,0"/>
 			<Button Content="{Binding StopOrStartName,UpdateSourceTrigger=PropertyChanged,Mode=OneWay}" Command="{Binding Start}" Margin="0,10,0,0"/>
 			
 			<Label FontWeight="DemiBold" FontSize="14"  Content="{Binding CountSteps, UpdateSourceTrigger=PropertyChanged}" Margin="0,10,0,0"/>
-			<Label FontWeight="DemiBold" FontSize="14"  Content="{Binding InfoTimeI, UpdateSourceTrigger=PropertyChanged}" Margin="0,20,0,0"/>
 			
-			<Label Content="C0"/>
+			<Label Content="C0"  Margin="0,10,0,0"/>
 			<TextBox Text="{Binding C0, UpdateSourceTrigger=LostFocus}"/>
 			<Label Content="D"/>
 			<TextBox Text="{Binding D, UpdateSourceTrigger=LostFocus}"/>
