@@ -183,7 +183,19 @@ namespace MM_MonteCarlo
         /// 
         /// </summary>
         /// <returns></returns>
-        public bool[,] GetGridStatus() => _gridStatus;
+        public bool[,] GetGridStatus()
+        {
+            var temp = new bool[_maxX, _maxY];
+            for (var x=0; x< _maxX;x++)
+            {
+                for (var y=0; y< _maxY;y++)
+                {
+                    temp[x, y] = _gridStatus[x, y];
+                }
+            }
+
+            return temp;
+        }
 
         public bool GetRightBorderStatus() => _rightBorder;
     }

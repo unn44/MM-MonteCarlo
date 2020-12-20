@@ -114,6 +114,16 @@
 			<TextBox Text="{Binding D, UpdateSourceTrigger=LostFocus}"/>
 			<Button Content="Получить распределение" Command="{Binding CalcTheory}" Margin="0,10,0,0"
 			        IsEnabled="{Binding IsTheoryAvailable}"/>
+			
+			<RadioButton Content="C(x,YY,ti)" GroupName="C" Margin="0,20,0,0" IsChecked="{Binding IsCxt}"/>
+			<RadioButton Content="C(XX, y,ti)" GroupName="C" Margin="0,10,0,0"/>
+			<Label Content="XX / YY" Margin="0,10,0,0"/>
+			<TextBox Text="{Binding PosXXYY, UpdateSourceTrigger=LostFocus}"/>
+			<Label Content="Область усреднения (0 - откл.)"/>
+			<TextBox Text="{Binding Delta2D, UpdateSourceTrigger=LostFocus}"/>
+			
+			<Button Content="Построить распределение" Command="{Binding CalcThird}" Margin="0,10,0,0"
+			        IsEnabled="{Binding IsEnd}"/>
 		</StackPanel>
 	</Grid>
 </Window>
