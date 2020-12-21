@@ -82,6 +82,14 @@
 					<oxy:LineSeries ItemsSource="{Binding PointsT3theory}" Title="t3"/>
 				</oxy:Plot.Series>
 			</oxy:Plot>
+			<oxy:Plot  InvalidateFlag="{Binding InvalidateFlagExp}" Title="Экспериментальное распределение примеси"
+			           Margin="10,10,20,10" Height="310" HorizontalAlignment="Stretch">
+				<oxy:Plot.Series>
+					<oxy:LineSeries ItemsSource="{Binding PointsT1exp}" LineStyle="None"  MarkerType="Circle" MarkerSize="3" MarkerFill="Green" Title="t1"/>
+					<oxy:LineSeries ItemsSource="{Binding PointsT2exp}" LineStyle="None"  MarkerType="Circle" MarkerSize="3" MarkerFill="DarkGoldenrod" Title="t2"/>
+					<oxy:LineSeries ItemsSource="{Binding PointsT3exp}" LineStyle="None"  MarkerType="Circle" MarkerSize="3" MarkerFill="Brown" Title="t3"/>
+				</oxy:Plot.Series>
+			</oxy:Plot>
 		</StackPanel>
 		<StackPanel Grid.Column="2" Margin="0,0,10,0">
 			<Label Content="Число узлов по оси Y"/>
